@@ -41,8 +41,9 @@ class SportRepository(
      * @return LiveData<Resource<List<Match>>> список матчей в обертке Resource
      */
     fun nextMatches(leagueId: String): LiveData<Resource<List<Match>>> {
-
+        //создается обьект NetworkBoundResource.Тип результата List<Match, тип ответа SchedulesResponse
         return object : NetworkBoundResource<List<Match>, SchedulesResponse>(coroutineContext) {
+
             override fun saveCallResult(item: SchedulesResponse) {
                 val matches = item.events
                 matches?.let { matchesData ->

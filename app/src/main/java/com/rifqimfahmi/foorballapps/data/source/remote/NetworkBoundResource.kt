@@ -7,8 +7,8 @@ import com.rifqimfahmi.foorballapps.vo.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-/*
- * Created by Rifqi Mulya Fahmi on 01/12/18.
+/**
+ * общий параметризованный класс для всех типов данных,запрашиваемых из репозитория
  */
 
 abstract class NetworkBoundResource<ResultType, RequestType>
@@ -16,12 +16,18 @@ constructor(private val contextProviders: ContextProviders) {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
 
+    //вызывается при создании класса
     init {
+        //в результирующую livedata кладется null
         result.value = Resource.loading(null)
+        //идет загрузка данных из БД
         val dbSource = loadFromDb()
+        //в результирующую livedata идет запись из того или иного источника в зависимости от условий
         result.addSource(dbSource) { data ->
+
             result.removeSource(dbSource)
             if (shouldFetch(data)) {
+                //запрос данных с сервера
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
@@ -37,7 +43,9 @@ constructor(private val contextProviders: ContextProviders) {
         }
     }
 
+    //запрос данных с сервера
     private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+        //создается
         val apiResponse = createCall()
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
