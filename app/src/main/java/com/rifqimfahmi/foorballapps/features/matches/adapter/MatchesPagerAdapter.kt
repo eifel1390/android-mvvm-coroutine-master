@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.rifqimfahmi.foorballapps.features.matches.MatchesListFragment
 
 /*
- * Created by Rifqi Mulya Fahmi on 19/11/18.
+ * адаптер для прослушивания  клика на табах next и last
  */
  
 class MatchesPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {

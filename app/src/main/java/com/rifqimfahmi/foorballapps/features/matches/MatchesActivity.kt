@@ -27,6 +27,7 @@ class MatchesActivity : AppCompatActivity() {
 
         tb_main.setTitle(R.string.app_name)
         vpMain.adapter = MainPagerAdapter(supportFragmentManager)
+
         btmNavMain.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.matches -> vpMain.setCurrentItem(0, false)

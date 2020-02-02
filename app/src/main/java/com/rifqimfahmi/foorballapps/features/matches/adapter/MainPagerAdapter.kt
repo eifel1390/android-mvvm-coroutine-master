@@ -12,6 +12,7 @@ import com.rifqimfahmi.foorballapps.features.matches.TeamsFragment
  */
  
 class MainPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+
     override fun getItem(position: Int): Fragment {
         return when(position) {
             0 -> MatchesFragment.newInstance()

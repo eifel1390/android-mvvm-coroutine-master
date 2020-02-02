@@ -1,6 +1,7 @@
 package com.rifqimfahmi.foorballapps.util
 
 import android.content.Context
+import android.util.Log
 import com.rifqimfahmi.foorballapps.R
 
 /**
@@ -11,7 +12,7 @@ fun Context.getLeaguesName(position: Int) : String {
     return resources.getStringArray(R.array.leagues)[position]
 }
 
-//возвращает id лиги
+//принимает ид лиги выбранной в выпадающем списке, конвертит ее в стрингу c ид.Массив со стрингами хранится в strings - ресурсе
 fun Context.getLeaguesId(position: Int) : String {
     return resources.getStringArray(R.array.leagues_id)[position]
 }

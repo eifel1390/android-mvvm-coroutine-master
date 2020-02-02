@@ -40,8 +40,9 @@ class MatchesListFragment : Fragment() {
         srl_list.setOnRefreshListener { viewModel.refreshMatches() }
 
         rv_list.layoutManager = LinearLayoutManager(context)
-        //установка адаптера для recyclerView со списком матчей, адаптеру передается контекст, обертка Resource и реализация слушателя нажатия по матчу
+        //установка адаптера для recyclerView со списком матчей, адаптеру передается контекст, обертка Resource и лямбда с реализацией слушателя нажатия по матчу
         rv_list.adapter = MatchesAdapter(context, Resource.loading(null)) {
+            //по нажатию на матч
             context?.startActivity(
                 MatchDetailActivity.getStartIntent(context, it.idEvent, it.idHomeTeam, it.idAwayTeam)
             )
@@ -49,12 +50,14 @@ class MatchesListFragment : Fragment() {
             //проверка константы с которой вызвали фрагмент
         when (getType()) {
             TYPE_NEXT_MATCH -> {
-                //запрос у вьюмодели набора следующих матчей,установка подписчика на этот набор
+                //запрос у вьюмодели набора следующих NEXT матчей,установка подписчика на этот набор
                 viewModel.nextMatches.observe(activity as MatchesActivity, Observer { data ->
                     updateData(data)
                 })
             }
+
             TYPE_PREV_MATCH -> {
+                //запрос у вьюмодели набора предыдущих LAST матчей,установка подписчика на этот набор
                 viewModel.prevMatch.observe(activity as MatchesActivity, Observer { data ->
                     updateData(data)
                 })

@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.fragment_matches.*
 import kotlinx.android.synthetic.main.fragment_matches.view.*
 
 /**
- * фрагмент,отображает внутри себя две вкладки, next (будущие матчи) и last (прошедшие матчи) , а также search для выбора лиг
- * установлен слушатель на переключение между табами next и last
+ * фрагмент,отображает внутри себя две вкладки, next (будущие матчи) и last (прошедшие матчи) , а также выпадающий список для выбора лиг
+ * установлен слушатель на нажатие на выпадающий список
  */
 
 class MatchesFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -27,7 +27,7 @@ class MatchesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         return inflater.inflate(R.layout.fragment_matches, container, false).also {
             //инициализация вьюмодели MatchesViewModel
             viewModel = (activity as MatchesActivity).obtainViewModel()
-            //слушатель на search панель
+            //слушатель на выпадающий список
             it.sp_leagues.onItemSelectedListener = this
         }
     }
@@ -39,7 +39,7 @@ class MatchesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupViewPager() {
-        //установка адаптера на прослушивание переключения на матче в списке
+        //установка адаптера на прослушивание клика на табах next и last
         vpMatches.adapter = MatchesPagerAdapter(childFragmentManager)
         tabMatches.setupWithViewPager(vpMatches)
     }
@@ -47,7 +47,7 @@ class MatchesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) { }
 
-    //вызывается если произошло нажатие на next или last
+    //вызывается если произошел выбор в выпадающем списке лиг
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         viewModel.setMatchesFilterBy(position)
     }

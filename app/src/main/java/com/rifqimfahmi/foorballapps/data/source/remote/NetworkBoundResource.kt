@@ -22,12 +22,13 @@ constructor(private val contextProviders: ContextProviders) {
         result.value = Resource.loading(null)
         //идет загрузка данных из БД
         val dbSource = loadFromDb()
-        //в результирующую livedata идет запись из того или иного источника в зависимости от условий
+        //в результирующую livedata записываем данные из бд (dbSource)
         result.addSource(dbSource) { data ->
-
+            //отписываемся от dbSource, он больше не нужен
             result.removeSource(dbSource)
+            //проверка новых данных с сервера
             if (shouldFetch(data)) {
-                //запрос данных с сервера
+                //отправка данных с бдна сервер для проверки свежие ли они
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
@@ -43,13 +44,15 @@ constructor(private val contextProviders: ContextProviders) {
         }
     }
 
-    //запрос данных с сервера
+    //метод делает запрос данных с сервера.Принимает на вход livedata result,в которую ранее уже положены данные из бд
     private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
-        //создается
+        //создается apiResponse
         val apiResponse = createCall()
+        //в livedata result
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
         }
+
 
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)

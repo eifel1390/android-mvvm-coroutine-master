@@ -35,13 +35,9 @@ class SportRepository(
     private val coroutineContext: ContextProviders
 ) {
 
-    /**
-     * загрузка следующих матчей
-     * @param leagueId id лиги
-     * @return LiveData<Resource<List<Match>>> список матчей в обертке Resource
-     */
+    //этот метод берет на вход ид лиги и возвращает livedata со списком матчей,упакованным в обертку Resource
     fun nextMatches(leagueId: String): LiveData<Resource<List<Match>>> {
-        //создается обьект NetworkBoundResource.Тип результата List<Match, тип ответа SchedulesResponse
+        //создается обьект NetworkBoundResource
         return object : NetworkBoundResource<List<Match>, SchedulesResponse>(coroutineContext) {
 
             override fun saveCallResult(item: SchedulesResponse) {

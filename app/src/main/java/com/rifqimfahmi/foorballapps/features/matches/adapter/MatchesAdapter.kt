@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.item_match.view.*
  * адаптер для списка матчей NEXT или LAST
  */
 
+//принимает контекст, обертку Resource с данными, слушатель нажатия на матч
 class MatchesAdapter(ctx: Context?, resource: Resource<List<Match>>, private val clickListener: (Match) -> Unit) :
     BaseRVAdapter<Match>(ctx, resource) {
 

@@ -2,6 +2,7 @@ package com.rifqimfahmi.foorballapps.features.matches
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,20 +22,25 @@ import com.rifqimfahmi.foorballapps.vo.Team
 @OpenForTesting
 class MatchesViewModel(context: Application, sportRepository: SportRepository) : AndroidViewModel(context) {
 
-    // LiveData for league categories
+    // LiveData в которой хранятся ид лиги,выбранной в выпадающем списке
     val matchFilterId = MutableLiveData<String>()
+
     val teamFilterId = MutableLiveData<String>()
 
     val context: Context = context.applicationContext // application Context to avoid leaks
 
     //запрос списка следующих матчей
-    //делается динамическая переработка входящего livedata matchFilterId.Если в matchFilterId ничего нет
+    //возвращает livedata со списком матчей,упакованным в обертку Resource
+    //Transformations динамически меняет тип данных в livedata
+
     val nextMatches: LiveData<Resource<List<Match>>> = Transformations.switchMap(matchFilterId) { leagueId ->
+        //получаем matchFilterId в параметр, далее он используется под именем leagueId
+        //если leagueId пустое или равно null
         if (leagueId.isNullOrBlank()) {
-            //то создается livedata с null значением
+            //то создается и возвращается специальная livedata  с null значением
             AbsentLiveData.create()
         } else {
-            //если matchFilterId не пустой, то берется значение из него и отдается в sportRepository.nextMatches
+            //если leagueId не пустое то оно отдается в sportRepository.nextMatches
             sportRepository.nextMatches(leagueId)
         }
     }
@@ -59,6 +65,7 @@ class MatchesViewModel(context: Application, sportRepository: SportRepository) :
 
     val favoriteTeams: LiveData<Resource<List<Team>>> = sportRepository.getFavoriteTeams()
 
+    //произошел выбор в выпадающем списке лиг
     //записывает в livedata matchFilterId id выбранной лиги
     fun setMatchesFilterBy(position: Int) {
         matchFilterId.value = context.getLeaguesId(position)
